@@ -14,7 +14,6 @@ public class UnitProfile : MonoBehaviour
     [Header("攻擊力")]
     public int atk = 10;
     [Header("攻擊CD")]
-    gameob
     [Range(0.1f, 100f)]
     public float atkCd = 10f;
     [Header("是否死亡")]
@@ -27,6 +26,7 @@ public class UnitProfile : MonoBehaviour
     public GameObject fireLight;
     public GameObject detectTrigger;
     public GameObject rayCastStartPoint;
+    public int layerNum;
 
     void Start()
     {
