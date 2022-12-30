@@ -18,6 +18,9 @@ public class UnitProfile : MonoBehaviour
     public float atkCd = 10f;
     [Header("是否死亡")]
     public bool isDead = false;
+    [Header("當前目標座標")]
+    public Vector3 targetPos;
+
 
     [Space]
     [Header("物件索引")]
@@ -28,9 +31,14 @@ public class UnitProfile : MonoBehaviour
     public GameObject rayCastStartPoint;
     public int layerNum;
 
+    private EngageDetect detect;
+
     void Start()
     {
         faction = this.tag;
+        layerNum = this.gameObject.layer;
+        detect = GetComponent<EngageDetect>();
     }
+
 
 }
