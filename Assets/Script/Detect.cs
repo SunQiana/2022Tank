@@ -6,16 +6,18 @@ using UnityEngine;
 /// 偵測敵人，並確認是否可以攻擊。
 /// 1、檢測是否為單位(嘗試抓profile) 2、檢測是否為敵人(比對tag) 3、檢測是否遮擋 4、以collider獲取目標資訊 5、繼續以ray檢測是否遮擋
 /// </summary>
-public class EngageDetect : MonoBehaviour
+public class Detect : MonoBehaviour
 {
     private UnitProfile localProfile;
     private UnitProfile otherProfile;
+    private Attack localAttackCom;
     private Collider detectTrigger;
     private string localFactionTag;
     private Vector3 otherPos;
     private Vector3 rayCastStartPoint;
     private RaycastHit hitInfo;
     private bool ifEngage;
+    private GameObject otherObj;
 
     void Awake()
     {
@@ -23,13 +25,14 @@ public class EngageDetect : MonoBehaviour
         detectTrigger = localProfile.detectTrigger.GetComponent<Collider>();
         localFactionTag = localProfile.faction;
         otherProfile = null;
+        otherObj = null;
     }
 
     void OnTriggerStay(Collider other)
     {
         otherPos = other.transform.position;
         if (IsEnemy(other))
-        Raycast(otherPos, out hitInfo);
+        Raycast(otherPos, out hitInfo, otherObj);
         else if (IfBlocked(otherPos) != false)
         ifEngage = true;
     }
@@ -41,7 +44,7 @@ public class EngageDetect : MonoBehaviour
         else return false; 
     }
 
-    private void Raycast(Vector3 otherPos, out RaycastHit hitInfo)
+    private void Raycast(Vector3 otherPos, out RaycastHit hitInfo, GameObject other)
     {
         rayCastStartPoint = localProfile.rayCastStartPoint.transform.position;
         Ray ray = new Ray(rayCastStartPoint, (otherPos-rayCastStartPoint).normalized);
@@ -62,6 +65,12 @@ public class EngageDetect : MonoBehaviour
 
     public bool IfEngage ()
     {
+        return ifEngage;
+    }
+
+    public bool IfEngage (out GameObject other)
+    {
+        other = otherObj;
         return ifEngage;
     }
 

@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,13 +32,15 @@ public class UnitProfile : MonoBehaviour
     public GameObject rayCastStartPoint;
     public int layerNum;
 
-    private EngageDetect detect;
+    public Detect detect;
+    public Attack attack; 
 
     void Start()
     {
         faction = this.tag;
         layerNum = this.gameObject.layer;
-        detect = GetComponent<EngageDetect>();
+        detect = GetComponent<Detect>();
+        attack = GetComponent<Attack>();
     }
 
 
