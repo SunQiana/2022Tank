@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,32 +10,33 @@ using UnityEngine;
 public class Detect : MonoBehaviour
 {
     private UnitProfile localProfile;
-    private UnitProfile otherProfile;
+    private UnitProfile otherProfile = null;
     private Attack localAttackCom;
     private Collider detectTrigger;
     private string localFactionTag;
     private Vector3 otherPos;
     private Vector3 rayCastStartPoint;
     private RaycastHit hitInfo;
-    private bool ifEngage;
-    private GameObject otherObj;
-
+    private bool isEngaging = false; //是否正與上一個敵人交戰
+ 
     void Awake()
     {
         localProfile = this.GetComponent<UnitProfile>();
-        detectTrigger = localProfile.detectTrigger.GetComponent<Collider>();
-        localFactionTag = localProfile.faction;
-        otherProfile = null;
-        otherObj = null;
+        detectTrigger = localProfile.detectTrigger;
+        localFactionTag = localProfile.faction;   
     }
 
     void OnTriggerStay(Collider other)
     {
-        otherPos = other.transform.position;
         if (IsEnemy(other))
-        Raycast(otherPos, out hitInfo, otherObj);
-        else if (IfBlocked(otherPos) != false)
-        ifEngage = true;
+        SendAttackOrder(other);
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (IsEnemy(other)) 
+            if(other.GetComponentInParent<UnitProfile>().gameObject == otherProfile.gameObject)
+                ExitAttack();
     }
 
     private bool IsEnemy(Collider other)
@@ -44,34 +46,52 @@ public class Detect : MonoBehaviour
         else return false; 
     }
 
-    private void Raycast(Vector3 otherPos, out RaycastHit hitInfo, GameObject other)
+    private void Raycast(Vector3 otherPos, Collider other)
     {
-        rayCastStartPoint = localProfile.rayCastStartPoint.transform.position;
-        Ray ray = new Ray(rayCastStartPoint, (otherPos-rayCastStartPoint).normalized);
-        Physics.Raycast(ray, out hitInfo, Vector3.Distance(rayCastStartPoint, otherPos), 1<<otherProfile.layerNum | 1<< 7, QueryTriggerInteraction.Ignore);   
+        rayCastStartPoint = localProfile.rayCastStartPoint.transform.position; //實時獲取raycast起點
+
+        Ray ray = new Ray(rayCastStartPoint, (otherPos-rayCastStartPoint).normalized); //ray定義
+        Physics.Raycast(ray, out hitInfo, Vector3.Distance(rayCastStartPoint, otherPos), 1<<otherProfile.layerNum | 1<< 7, QueryTriggerInteraction.Ignore);
+        IfBlocked(other);
+
         Debug.DrawLine(ray.origin,hitInfo.point,Color.red,3);
     }
 
-    private bool IfBlocked(Vector3 otherPos)
+    private bool IfBlocked(Collider other)
     {
-        return otherPos != hitInfo.point;
+        return other.GetComponentInParent<UnitProfile>().gameObject != hitInfo.transform.gameObject;
     }
 
-    public bool IfEngage (out RaycastHit hitinfo)
+    public RaycastHit AccessHitIfo()
     {
-        hitinfo = hitInfo;
-        return ifEngage;
+        return hitInfo;
     }
 
-    public bool IfEngage ()
+    private void SendAttackOrder(Collider other)
     {
-        return ifEngage;
+        if (IfAttack(other))
+        {
+            isEngaging = true;
+            localProfile.attack.AttackOrderReciver(true,otherProfile);
+        }
     }
 
-    public bool IfEngage (out GameObject other)
+    private bool IfAttack (Collider other)
     {
-        other = otherObj;
-        return ifEngage;
+        otherPos = other.transform.position;
+        Raycast(otherPos, other);
+
+        if (IfBlocked(other) == false && isEngaging == false )
+        return true;
+        else return false;
+    }
+
+    private void ExitAttack ()
+    {
+        localProfile.attack.AttackOrderReciver(false);
+        isEngaging = false;
+        otherProfile = null;
+        otherPos = Vector3.zero;
     }
 
 }
