@@ -40,7 +40,7 @@ public class Detect : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if (IsEnemy(other))
+        if (IsEnemy(other) && IsTargetDead() == false)
         SendAttackOrder(other);
     }
 
@@ -104,6 +104,11 @@ public class Detect : MonoBehaviour
         isEngaging = false;
         otherProfile = null;
         otherPos = Vector3.zero;
+    }
+
+    private bool IsTargetDead()
+    {
+        return (otherProfile.health.GetHpState() <= 0f);
     }
 
 }

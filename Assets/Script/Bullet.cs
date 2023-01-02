@@ -9,7 +9,9 @@ public class Bullet : MonoBehaviour
     private UnitProfile otherProfile;
     private int damage;
     private int layer;
-    private Collider rangeDamageCollider;
+    public float damageRadius = 1.8f;
+
+    private Collider[] hitColliders;
 
     public void SpawnerInfoReciver(UnitProfile spawnerProfile)
     {
@@ -30,9 +32,12 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(IsEnemy(other))
-        {
+       hitColliders = Physics.OverlapSphere(this.transform.position,damageRadius,1<<otherProfile.layerNum | 0<< 7,QueryTriggerInteraction.Ignore);
 
+       foreach (var hitCollider in hitColliders)//拆解collider組
+        {
+            if (IsEnemy(hitCollider))
+            SendDamage();
         }
     }
 
@@ -43,13 +48,15 @@ public class Bullet : MonoBehaviour
         else return false; 
     }
 
-    public void DistoryThis()
+    private void DistoryThis()
     {
-
+        Destroy(this.gameObject);
     } 
 
     private void SendDamage()
     {
-        //otherProfile.health.DamageDealOrder(,)
+        otherProfile.health.Damage(damage);
+        DistoryThis();
     }
+    
 }

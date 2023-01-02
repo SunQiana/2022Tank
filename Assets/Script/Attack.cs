@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
-    private UnitProfile otherProfile;
+    private UnitProfile otherProfile = null;
     private UnitProfile localProfile;
     private Detect localDetectCom;
     private int localAtk;
@@ -43,12 +43,12 @@ public class Attack : MonoBehaviour
         }
     }
 
-    public void AttackOrderReciver(bool permissionType,UnitProfile otherProfileInput)
+    public void AttackOrderReciver(bool permissionType,UnitProfile targetProfileInput)
     {
         isAttackAble = permissionType;
          if (permissionType == true)
         {
-        otherProfileInput = otherProfile;
+        targetProfileInput = otherProfile;
         AttackOrder();
         }
     }
@@ -77,11 +77,13 @@ public class Attack : MonoBehaviour
 
     private void ShootBullet(UnitProfile otherProfile)
     {
-
+        BulletSpawn(otherProfile);
     }
 
-    private void BulletSpawn()
+    private void BulletSpawn(UnitProfile otherProfile)
     {
+        //Quaternion rotation =  Quaternion.LookRotation(otherProfile.transform.position, Vector3.zero);
+        print(otherProfile.gameObject);
         GameObject instantiatedBullet = Instantiate<GameObject>(bullet,localProfile.rayCastStartPoint.transform);
         instantiatedBullet.transform.LookAt(otherProfile.transform);
     }
