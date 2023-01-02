@@ -9,6 +9,7 @@ using UnityEngine;
 /// </summary>
 public class Detect : MonoBehaviour
 {
+    //攻擊進行中受到遮擋，退出戰鬥的條件尚未寫
     private UnitProfile localProfile;
     private UnitProfile otherProfile = null;
     private Attack localAttackCom;
@@ -18,12 +19,23 @@ public class Detect : MonoBehaviour
     private Vector3 rayCastStartPoint;
     private RaycastHit hitInfo;
     private bool isEngaging = false; //是否正與上一個敵人交戰
+    private string enemyTag;
  
     void Awake()
     {
         localProfile = this.GetComponent<UnitProfile>();
         detectTrigger = localProfile.detectTrigger;
-        localFactionTag = localProfile.faction;   
+        localFactionTag = localProfile.faction;  
+        EnemyInfoSet(); 
+    }
+
+    private void EnemyInfoSet()
+    {
+        if (this.tag == "Player")
+        enemyTag = "Enemy";
+
+        if(this.tag == "Enemy")
+        enemyTag = "Player";
     }
 
     void OnTriggerStay(Collider other)
@@ -42,7 +54,7 @@ public class Detect : MonoBehaviour
     private bool IsEnemy(Collider other)
     {
         if ((otherProfile = other.GetComponentInParent<UnitProfile>()) != null && other.isTrigger == false)
-        return other.tag != this.tag;
+        return other.tag == enemyTag;
         else return false; 
     }
 

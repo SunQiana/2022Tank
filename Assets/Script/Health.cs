@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    UnitProfile localProfile;
-    UnitProfile otherProfile;
+    private UnitProfile localProfile;
+    private UnitProfile otherProfile;
     private int healthPoint;
     private bool isDead;
     private Vector3 attackSource;
@@ -33,7 +33,7 @@ public class Health : MonoBehaviour
         return healthPoint;
     }
 
-    public void AttackOrder(int damage, out bool isDeadOut)
+    public void DamageDealOrder(int damage, out bool isDeadOut)
     {
         if (isDead != false)
         DamageInput(damage,out isDeadOut);

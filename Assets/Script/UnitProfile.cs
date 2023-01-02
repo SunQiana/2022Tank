@@ -32,6 +32,9 @@ public class UnitProfile : MonoBehaviour
     [Header("攻擊CD")]
     [Range(0.1f, 100f)]
     public float atkCd = 10f;
+    [Header("子彈速度")]
+    [Range(0.1f, 100f)]
+    public float bulletSpeed;
 
 [Header("----------------------------------------------------------------------------------------------------")]
     [Header("物件索引")]
@@ -39,6 +42,8 @@ public class UnitProfile : MonoBehaviour
     public Collider detectTrigger;
     public GameObject rayCastStartPoint;
     public int layerNum;
+    public GameObject bullet;
+
 
 [Header("----------------------------------------------------------------------------------------------------")]
     [Header("腳本索引")]

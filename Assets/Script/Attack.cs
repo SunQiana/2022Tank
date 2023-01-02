@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
-    UnitProfile otherProfile;
-    UnitProfile localProfile;
-    Detect localDetectCom;
+    private UnitProfile otherProfile;
+    private UnitProfile localProfile;
+    private Detect localDetectCom;
     private int localAtk;
     private float localAtkCD;
     private bool isAttackAble = false;
     private bool isReady = true;
     private bool timeRecorded = false;
     private float coldDownTiming = 0;
-
+    private GameObject bullet;
+    private string otherTag = null;
     
 
     void Awake()
@@ -22,6 +23,7 @@ public class Attack : MonoBehaviour
         localAtk = localProfile.atk;
         localAtkCD = localProfile.atkCd;
         localDetectCom = localProfile.detect;
+        bullet = localProfile.bullet;
     }   
 
     void FixedUpdate()
@@ -36,6 +38,7 @@ public class Attack : MonoBehaviour
         {
         isReady = timeRecorded = false; //重設bool
         RecordRloadTime();
+        ShootBullet(otherProfile);
         print(this.tag + "Attack");
         }
     }
@@ -71,4 +74,16 @@ public class Attack : MonoBehaviour
             coldDownTiming = 0f; //裝填完成，清空時間紀錄
         }
     }
+
+    private void ShootBullet(UnitProfile otherProfile)
+    {
+
+    }
+
+    private void BulletSpawn()
+    {
+        GameObject instantiatedBullet = Instantiate<GameObject>(bullet,localProfile.rayCastStartPoint.transform);
+        instantiatedBullet.transform.LookAt(otherProfile.transform);
+    }
+    
 }
