@@ -85,6 +85,7 @@ public class Detect : MonoBehaviour
         {
             isEngaging = true;
             localProfile.attack.AttackOrderReciver(true,otherProfile);
+            localProfile.turret.StartTracking(other.transform.position);
         }
     }
 
@@ -101,6 +102,7 @@ public class Detect : MonoBehaviour
     private void ExitAttack ()
     {
         localProfile.attack.AttackOrderReciver(false);
+        localProfile.turret.StopTracking();
         isEngaging = false;
         otherProfile = null;
         otherPos = Vector3.zero;

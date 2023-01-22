@@ -33,24 +33,30 @@ public class UnitProfile : MonoBehaviour
     [Range(0.1f, 100f)]
     public float atkCd = 10f;
     [Header("子彈速度")]
-    [Range(0.1f, 100f)]
-    public float bulletSpeed;
+    [Range(0.1f, 10)]
+    public float bulletSpeed = 5f;
+    [Header("移動速度")]
+    [Range(0.1f, 10f)]
+    public float movementSpeed = 5f;
 
-[Header("----------------------------------------------------------------------------------------------------")]
+
+    [Header("----------------------------------------------------------------------------------------------------")]
     [Header("物件索引")]
     [Space]
     public Collider detectTrigger;
     public GameObject rayCastStartPoint;
     public int layerNum;
     public GameObject bullet;
+    public GameObject turretObj;
 
 
 [Header("----------------------------------------------------------------------------------------------------")]
     [Header("腳本索引")]
     [Space]
-    [SerializeField] public Detect detect;
-    [SerializeField] public Attack attack; 
-    [SerializeField] public Health health;
+    public Detect detect;
+    public Attack attack; 
+    public Health health;
+    public Turret turret;
 
     void Awake()
     {
@@ -59,6 +65,7 @@ public class UnitProfile : MonoBehaviour
         detect = GetComponent<Detect>();
         attack = GetComponent<Attack>();
         health = GetComponent<Health>();
+        turret = GetComponent<Turret>();
     }
 
     void note()
@@ -69,5 +76,10 @@ public class UnitProfile : MonoBehaviour
         //子彈尚未能摧毀自身
         //子彈尚未能傳出傷害
         //攻擊進行中受到遮擋，退出戰鬥的條件尚未寫
+
+        //年假期間功能目標
+        //載具移動 (敵我)
+        //機槍射擊
+        //子彈系統先迴避
     }
 }
