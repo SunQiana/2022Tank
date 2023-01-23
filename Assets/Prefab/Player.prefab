@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4074758610004682770}
   - component: {fileID: 5336289084812793641}
   - component: {fileID: 2638827503476558428}
+  - component: {fileID: 8083144386122596202}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -55,9 +56,12 @@ MonoBehaviour:
   hp: 100
   atk: 10
   atkCd: 10
+  bulletSpeed: 0
+  movementSpeed: 0
   detectTrigger: {fileID: 0}
   rayCastStartPoint: {fileID: 0}
   layerNum: 0
+  bullet: {fileID: 0}
   detect: {fileID: 0}
   attack: {fileID: 0}
   health: {fileID: 0}
@@ -95,6 +99,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a44ecfab2aae1cd45865a874b0dc2c68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8083144386122596202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3302641401373015866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f97842b34559f444801e0ac5222350a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7944111530408962634
