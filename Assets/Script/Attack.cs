@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class Attack : MonoBehaviour
     private float coldDownTiming = 0;
     private GameObject bullet;
     private string otherTag = null;
+    private Vector3 otherPos = Vector3.zero;
+    Vector3 spwanPos;
     
 
     void Awake()
@@ -38,31 +41,26 @@ public class Attack : MonoBehaviour
         {
         isReady = timeRecorded = false; //重設bool
         RecordRloadTime();
-        ShootBullet(otherProfile);
-        print(this.tag + "Attack");
+        BulletSpawn();
         }
     }
 
-    public void AttackOrderReciver(bool permissionType,UnitProfile targetProfileInput)
+    public void AttackOrderReciver(bool isAttackAbleIn, Vector3 otherPosIn)
     {
-        isAttackAble = permissionType;
-         if (permissionType == true)
-        {
-        targetProfileInput = otherProfile;
+        isAttackAble = true;
+        otherPos = otherPosIn;
         AttackOrder();
-        }
     }
 
-    public void AttackOrderReciver(bool permissionType)
+    public void AttackOrderReciver(bool isAttackAbleIn) //如未輸入v3則自動設為false
     {
-        isAttackAble = false;
+        isAttackAble = isAttackAbleIn;
     }
 
     private void RecordRloadTime()
     {
         coldDownTiming = Time.fixedTime + localAtkCD;
         timeRecorded = true;
-        print (this.tag + "timeRecorded!" + coldDownTiming);
     }
 
     private void CheckIfReloaded()
@@ -75,17 +73,20 @@ public class Attack : MonoBehaviour
         }
     }
 
-    private void ShootBullet(UnitProfile otherProfile)
-    {
-        BulletSpawn(otherProfile);
+    private void BulletSpawn()
+    {   
+        OtherPosUpdate();
+        spwanPos = localProfile.rayCastStartPoint.transform.position; //每次生成前都要獲取位置
+        Quaternion rotation =  Quaternion.LookRotation(otherPos - spwanPos);
+        
+        GameObject instantiatedBullet = Instantiate<GameObject>(bullet,spwanPos,rotation);
+        instantiatedBullet.transform.SetParent(null);//取消子彈物件父級 
+        instantiatedBullet.GetComponent<Bullet>().SpawnerInfoReciver(localProfile);//傳遞資料給bullet
     }
 
-    private void BulletSpawn(UnitProfile otherProfile)
+    private void OtherPosUpdate()
     {
-        //Quaternion rotation =  Quaternion.LookRotation(otherProfile.transform.position, Vector3.zero);
-        print(otherProfile.gameObject);
-        GameObject instantiatedBullet = Instantiate<GameObject>(bullet,localProfile.rayCastStartPoint.transform);
-        instantiatedBullet.transform.LookAt(otherProfile.transform);
+        otherPos =  localProfile.detect.GetAttackPos();
     }
     
 }

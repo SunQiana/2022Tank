@@ -34,7 +34,7 @@ public class Health : MonoBehaviour
         return healthPoint;
     }
 
-    public int GetHpState(bool isDeadOut)
+    public int GetHpState(out bool isDeadOut)
     {
         isDeadOut = isDead;
         return healthPoint;

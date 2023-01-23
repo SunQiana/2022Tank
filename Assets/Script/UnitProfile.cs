@@ -64,10 +64,18 @@ public class UnitProfile : MonoBehaviour
     void note()
     {
         //子彈系統wip
-        //Attack腳本尚未能傳遞資料給子彈
-        //子彈尚未能射出
         //子彈尚未能摧毀自身
         //子彈尚未能傳出傷害
-        //攻擊進行中受到遮擋，退出戰鬥的條件尚未寫
+    }
+
+    void Update()
+    {
+       /* if(this.tag == "Enemy" )
+        print (health.GetHpState());*/
+
+        if(this.tag == "Player")
+        targetPos = detect.GetAttackPos();
+
+        hpNow = health.GetHpState(out isDead);
     }
 }

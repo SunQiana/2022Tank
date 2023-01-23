@@ -15,8 +15,8 @@ public class Detect : MonoBehaviour
     private Attack localAttackCom;
     private Collider detectTrigger;
     private string localFactionTag;
-    private Vector3 otherPos;
     private Vector3 rayCastStartPoint;
+    private Vector3 currentTargetPos;
     private RaycastHit hitInfo;
     private bool isEngaging = false; //是否正與上一個敵人交戰
     private string enemyTag;
@@ -64,7 +64,6 @@ public class Detect : MonoBehaviour
 
         Ray ray = new Ray(rayCastStartPoint, (otherPos-rayCastStartPoint).normalized); //ray定義
         Physics.Raycast(ray, out hitInfo, Vector3.Distance(rayCastStartPoint, otherPos), 1<<otherProfile.layerNum | 1<< 7, QueryTriggerInteraction.Ignore);
-        IfBlocked(other);
 
         Debug.DrawLine(ray.origin,hitInfo.point,Color.red,3);
     }
@@ -83,14 +82,17 @@ public class Detect : MonoBehaviour
     {
         if (IfAttack(other))
         {
+            currentTargetPos = other.transform.position;
             isEngaging = true;
-            localProfile.attack.AttackOrderReciver(true,otherProfile);
+            localProfile.attack.AttackOrderReciver(true,currentTargetPos);
         }
+        if (IfBlocked(other) == false)
+            ExitAttack ();
     }
 
     private bool IfAttack (Collider other)
     {
-        otherPos = other.transform.position;
+        Vector3 otherPos = other.transform.position;
         Raycast(otherPos, other);
 
         if (IfBlocked(other) == false && isEngaging == false )
@@ -103,7 +105,7 @@ public class Detect : MonoBehaviour
         localProfile.attack.AttackOrderReciver(false);
         isEngaging = false;
         otherProfile = null;
-        otherPos = Vector3.zero;
+        currentTargetPos = Vector3.zero;
     }
 
     private bool IsTargetDead()
@@ -111,4 +113,8 @@ public class Detect : MonoBehaviour
         return (otherProfile.health.GetHpState() <= 0f);
     }
 
+    public Vector3 GetAttackPos()
+    {
+        return hitInfo.point;
+    }
 }
