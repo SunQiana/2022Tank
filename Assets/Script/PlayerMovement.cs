@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PlayerMovement : MonoBehaviour
 {
     private UnitProfile localProfile;
-    private GameObject playerObj; //實際的移動對象
+    private GameObject playerObj; 
     private NavMeshAgent agent;
 
 
@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
         Raycast(inputV3,out RaycastHit hitInfo,out bool isHit);
         if(isHit)
         agent.SetDestination(hitInfo.point);
+        print("saaas");
     }
 
     private void Raycast(Vector3 inputV3,out RaycastHit hitInfo,out bool isHit)
