@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
     private UnitProfile localProfile;
     private GameObject playerObj; 
     private NavMeshAgent agent;
+    private Input_Main inputsys;
+
 
 
     private void Awake()
@@ -17,17 +20,20 @@ public class PlayerMovement : MonoBehaviour
         playerObj = localProfile.gameObject;
         agent = playerObj.GetComponent<NavMeshAgent>();
         agent.speed = localProfile.movementSpeed;
+        inputsys = new Input_Main();
+        inputsys.Main.Enable();
+        inputsys.Main.SetDesination.performed += MovementOrder;
+        inputsys.Main.SetDesination.canceled += MovementOrder;
     }
 
     private void Update()
     {
-        if(Input.GetMouseButtonDown(1))
-            MovementOrder(Input.mousePosition);
+        
     }
 
-    private void MovementOrder(Vector3 inputV3)
+    private void MovementOrder(InputAction.CallbackContext input)
     {
-        Raycast(inputV3,out RaycastHit hitInfo,out bool isHit);
+        Raycast(Mouse.current.position.ReadValue() ,out RaycastHit hitInfo,out bool isHit);
         if(isHit)
         agent.SetDestination(hitInfo.point);
         print("saaas");
@@ -41,5 +47,8 @@ public class PlayerMovement : MonoBehaviour
         if (hitInfo.collider.tag != "Ground")
             isHit = false;
                 else isHit = true;
-    }
+   }
 }
+
+
+
