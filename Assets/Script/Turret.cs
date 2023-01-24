@@ -13,12 +13,14 @@ public class Turret : MonoBehaviour
     private bool ifLook;
     private bool isReturned;
     public float turretSpeed = 1.5f;
+    private Detect detect;
 
     private void Awake()
     {
         unitProfile = this.GetComponent<UnitProfile>();
         turret = unitProfile.turretObj;
         GetUnitRoot();
+        detect = unitProfile.detect;
     }
     private void Update()
     {
@@ -48,7 +50,7 @@ public class Turret : MonoBehaviour
         }
 
         if (root == null)
-            Debug.LogWarning("Turret Can't Find Unit Model Root !");
+            Debug.LogWarning("Turret Can't Find Local Unit Model Root !");
     }
 
     public void StopTracking()
@@ -61,7 +63,7 @@ public class Turret : MonoBehaviour
     {
         ifLook = true;
         targetPos = targetPosInput;
-        print("wpakdoawd");
+
     }
 
 }

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5336289084812793641}
   - component: {fileID: 2638827503476558428}
   - component: {fileID: 8083144386122596202}
+  - component: {fileID: 5973874993014923998}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -62,9 +63,11 @@ MonoBehaviour:
   rayCastStartPoint: {fileID: 0}
   layerNum: 0
   bullet: {fileID: 0}
+  turretObj: {fileID: 0}
   detect: {fileID: 0}
   attack: {fileID: 0}
   health: {fileID: 0}
+  turret: {fileID: 0}
 --- !u!114 &4074758610004682770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,6 +116,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f97842b34559f444801e0ac5222350a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5973874993014923998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3302641401373015866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e300a6ce3add3384bbb5e3c200319397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turretSpeed: 1.5
 --- !u!1 &7944111530408962634
 GameObject:
   m_ObjectHideFlags: 0
