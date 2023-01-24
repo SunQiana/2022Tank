@@ -1,0 +1,34 @@
+{
+    "name": "Input_Main",
+    "maps": [
+        {
+            "name": "Main",
+            "id": "933ad1f5-d627-48c7-88ca-87fc7371e7ab",
+            "actions": [
+                {
+                    "name": "Set Desination",
+                    "type": "Button",
+                    "id": "c3840287-a590-4797-a656-9ed4b371ba2b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2b72a753-60c5-4a77-9af9-95c619a06b25",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Set Desination",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
