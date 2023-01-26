@@ -14,11 +14,19 @@ public class UnitProfile : MonoBehaviour
     [Header("單位當前資訊")]
     [Space]
     [Header("當前生命")]
-    [SerializeField] private int hpNow;
+    private int hpNow;
      [Header("當前目標座標")]
+     [Space]
     public Vector3 targetPos;
      [Header("是否死亡")]
     public bool isDead = false;
+    [Space]
+    [Header("敵人layer")]
+    public int enemyLayerNum;
+    [Space]
+    [Header("敵人tag")]
+    public string enemyTag;
+
    
 [Header("----------------------------------------------------------------------------------------------------")]
     [Header("單位預設數據")]
@@ -66,6 +74,7 @@ public class UnitProfile : MonoBehaviour
         attack = GetComponent<Attack>();
         health = GetComponent<Health>();
         turret = GetComponent<Turret>();
+        EnemyInfoSet();
     }
 
     void note()
@@ -81,8 +90,23 @@ public class UnitProfile : MonoBehaviour
         print (health.GetHpState());*/
 
         if(this.tag == "Player")
-        targetPos = detect.GetAttackPos();
 
         hpNow = health.GetHpState(out isDead);
     }
+
+     private void EnemyInfoSet()
+    {
+        if (this.tag == "Player")
+        {
+        enemyTag = "Enemy";
+        enemyLayerNum = 6;
+        }
+
+        if(this.tag == "Enemy")
+        {
+        enemyTag = "Player";
+        enemyLayerNum = 3;
+        }
+    }
+
 }

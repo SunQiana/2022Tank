@@ -10,7 +10,7 @@ public class Turret : MonoBehaviour
     private Quaternion originalRota;
     private GameObject root;
     private GameObject turret;
-    private bool ifLook;
+    private bool ifLook = false;
     private bool isReturned;
     public float turretSpeed = 1.5f;
     private Detect detect;
@@ -30,7 +30,7 @@ public class Turret : MonoBehaviour
     private void Looking()
     {
         if(ifLook)
-        turret.transform.LookAt(targetPos);
+        turret.transform.LookAt(detect.GetAttackPos());
     }
 
     private void EndLooking()
@@ -59,11 +59,9 @@ public class Turret : MonoBehaviour
         targetPos = Vector3.zero;
     }   
 
-    public void StartTracking(Vector3 targetPosInput)
+    public void StartTracking()
     {
         ifLook = true;
-        targetPos = targetPosInput;
-
     }
 
 }

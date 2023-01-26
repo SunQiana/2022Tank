@@ -14,98 +14,72 @@ public class Detect : MonoBehaviour
     private UnitProfile otherProfile = null;
     private Attack localAttackCom;
     private Collider detectTrigger;
-    private string localFactionTag;
     private Vector3 rayCastStartPoint;
     private Vector3 currentTargetPos;
     private RaycastHit hitInfo;
     private bool isEngaging = false; //是否正與上一個敵人交戰
     private string enemyTag;
+    private int enemyLayerNum;
  
     void Awake()
     {
         localProfile = this.GetComponent<UnitProfile>();
         detectTrigger = localProfile.detectTrigger;
-        localFactionTag = localProfile.faction;  
-        EnemyInfoSet(); 
-    }
-
-    private void EnemyInfoSet()
-    {
-        if (this.tag == "Player")
-        enemyTag = "Enemy";
-
-        if(this.tag == "Enemy")
-        enemyTag = "Player";
+        enemyLayerNum = localProfile.enemyLayerNum;
+        enemyTag = localProfile.enemyTag;
     }
 
     void OnTriggerStay(Collider other)
     {
-        if (IsEnemy(other) && IsTargetDead() == false)
+        if (IfSendAttackOrder(other)) 
         SendAttackOrder(other);
+
+       /* if(isEngaging)
+            if( IfBlocked(other))
+                ExitAttack(); //如果在交戰中，檢測到受阻擋，則脫離*/ //重寫
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (IsEnemy(other)) 
-            if(other.GetComponentInParent<UnitProfile>().gameObject == otherProfile.gameObject)
-                ExitAttack();
+        if(isEngaging && otherProfile != null) //如果在交戰中才進行判斷
+            if(other.gameObject == otherProfile.gameObject)
+            ExitAttack();
     }
 
     private bool IsEnemy(Collider other)
     {
         if ((otherProfile = other.GetComponentInParent<UnitProfile>()) != null && other.isTrigger == false)
-        return other.tag == enemyTag;
+            return other.tag == enemyTag; 
         else return false; 
     }
 
-    private void Raycast(Vector3 otherPos, Collider other)
+    private void Raycast()
     {
         rayCastStartPoint = localProfile.rayCastStartPoint.transform.position; //實時獲取raycast起點
-
+        Vector3 otherPos = otherProfile.transform.position;
         Ray ray = new Ray(rayCastStartPoint, (otherPos-rayCastStartPoint).normalized); //ray定義
-        Physics.Raycast(ray, out hitInfo, Vector3.Distance(rayCastStartPoint, otherPos), 1<<otherProfile.layerNum | 1<< 7, QueryTriggerInteraction.Ignore);
-
+        Physics.Raycast(ray, out hitInfo, Vector3.Distance(rayCastStartPoint, otherPos), 1<<enemyLayerNum | 1<<7, QueryTriggerInteraction.Ignore);
         Debug.DrawLine(ray.origin,hitInfo.point,Color.red,3);
     }
 
     private bool IfBlocked(Collider other)
     {
-        return other.GetComponentInParent<UnitProfile>().gameObject != hitInfo.transform.gameObject;
-    }
-
-    public RaycastHit AccessHitIfo()
-    {
-        return hitInfo;
+        Raycast();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+        return otherProfile.gameObject != hitInfo.transform.gameObject; //獲取unitprofile來確保獲取的是根物件，而不是collider子物件
     }
 
     private void SendAttackOrder(Collider other)
     {
-        if (IfAttack(other))
-        {
-            currentTargetPos = other.transform.position;
-            isEngaging = true;
-            localProfile.attack.AttackOrderReciver(true,currentTargetPos);
-            localProfile.turret.StartTracking(other.transform.position);
-        }
-        if (IfBlocked(other) == false)
-            ExitAttack ();
-    }
-
-    private bool IfAttack (Collider other)
-    {
-        Vector3 otherPos = other.transform.position;
-        Raycast(otherPos, other);
-
-        if (IfBlocked(other) == false && isEngaging == false )
-        return true;
-        else return false;
+        print("atk order sended");
+        isEngaging = true;
+        localProfile.attack.AttackOrderReciver();
     }
 
     private void ExitAttack ()
     {
-        localProfile.attack.AttackOrderReciver(false);
-        localProfile.turret.StopTracking();
         isEngaging = false;
+        print("exit atk");
+        localProfile.attack.ExitAttackOrder();
         otherProfile = null;
         currentTargetPos = Vector3.zero;
     }
@@ -117,6 +91,19 @@ public class Detect : MonoBehaviour
 
     public Vector3 GetAttackPos()
     {
-        return hitInfo.point;
+        return otherProfile.gameObject.transform.position;
+    }
+
+    private bool IfSendAttackOrder(Collider other)
+    {
+        //是敵人 且未與上個目標交戰中 //先判斷自身狀態並確認是否為敵人
+        if (IsEnemy(other) && (isEngaging == false))
+        {
+                if (IfBlocked(other) == false && (IsTargetDead() == false)) //且未受阻擋 目標未死亡 //再判斷敵人狀態以免null
+                    return true;
+                else return false;
+        }
+        else return false;
     }
 }
+

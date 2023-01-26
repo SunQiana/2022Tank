@@ -16,6 +16,7 @@ public class Health : MonoBehaviour
         localProfile = this.GetComponent<UnitProfile>();
         healthPoint = localProfile.hp;
         isDead = localProfile.isDead;
+        
     }
 
     public void Damage(int damagePoint)

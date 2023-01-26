@@ -36,7 +36,6 @@ public class PlayerMovement : MonoBehaviour
         Raycast(Mouse.current.position.ReadValue() ,out RaycastHit hitInfo,out bool isHit);
         if(isHit)
         agent.SetDestination(hitInfo.point);
-        print("saaas");
     }
 
     private void Raycast(Vector3 inputV3,out RaycastHit hitInfo,out bool isHit)

@@ -9,16 +9,15 @@ public class Attack : MonoBehaviour
     private UnitProfile localProfile;
     private Detect localDetectCom;
     private int localAtk;
-    private float localAtkCD;
+    private float localAtkCD = 2.0f;
     private bool isAttackAble = false;
-    private bool isReady = true;
-    private bool timeRecorded = false;
     private float coldDownTiming = 0;
     private GameObject bullet;
     private string otherTag = null;
     private Vector3 otherPos = Vector3.zero;
-    Vector3 spwanPos;
-    
+    private Vector3 spwanPos;
+    private Turret turret;
+
 
     void Awake()
     {
@@ -27,50 +26,35 @@ public class Attack : MonoBehaviour
         localAtkCD = localProfile.atkCd;
         localDetectCom = localProfile.detect;
         bullet = localProfile.bullet;
+        turret = localProfile.turret;
     }   
-
-    void FixedUpdate()
-    {
-        CheckIfReloaded();
-        AttackOrder();
-    }
 
     private void AttackOrder()
     {
-        if(isReady && isAttackAble)
-        {
-        isReady = timeRecorded = false; //重設bool
-        RecordRloadTime();
-        BulletSpawn();
-        }
+       StartCoroutine(AttackIEnume());
     }
 
-    public void AttackOrderReciver(bool isAttackAbleIn, Vector3 otherPosIn)
+    IEnumerator AttackIEnume()
+    {
+        while(isAttackAble)
+        {
+            BulletSpawn();
+            yield return new WaitForSeconds(localAtkCD);
+        }
+        yield break;
+    }
+
+    public void AttackOrderReciver()
     {
         isAttackAble = true;
-        otherPos = otherPosIn;
         AttackOrder();
     }
 
-    public void AttackOrderReciver(bool isAttackAbleIn) //如未輸入v3則自動設為false
+    public void ExitAttackOrder() 
     {
-        isAttackAble = isAttackAbleIn;
-    }
-
-    private void RecordRloadTime()
-    {
-        coldDownTiming = Time.fixedTime + localAtkCD;
-        timeRecorded = true;
-    }
-
-    private void CheckIfReloaded()
-    {
-        if(Time.fixedTime >= coldDownTiming)
-        {
-            isReady = true;
-            timeRecorded = false;
-            coldDownTiming = 0f; //裝填完成，清空時間紀錄
-        }
+        isAttackAble = false;
+        turret.StopTracking();
+        StopCoroutine(AttackIEnume());
     }
 
     private void BulletSpawn()
@@ -86,7 +70,7 @@ public class Attack : MonoBehaviour
 
     private void OtherPosUpdate()
     {
-        otherPos =  localProfile.detect.GetAttackPos();
+        otherPos =  Vector3.zero;
     }
     
 }
