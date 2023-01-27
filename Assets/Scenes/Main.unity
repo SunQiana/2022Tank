@@ -1901,7 +1901,7 @@ PrefabInstance:
     - target: {fileID: 4824456138777275608, guid: 5bcd6861953dee24ba2a3f1d4c535a59,
         type: 3}
       propertyPath: atkCd
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4824456138777275608, guid: 5bcd6861953dee24ba2a3f1d4c535a59,
         type: 3}
@@ -1924,6 +1924,11 @@ PrefabInstance:
       propertyPath: turretObj
       value: 
       objectReference: {fileID: 1735184479}
+    - target: {fileID: 4824456138777275608, guid: 5bcd6861953dee24ba2a3f1d4c535a59,
+        type: 3}
+      propertyPath: bulletSpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4824456138777275608, guid: 5bcd6861953dee24ba2a3f1d4c535a59,
         type: 3}
       propertyPath: detectTrigger

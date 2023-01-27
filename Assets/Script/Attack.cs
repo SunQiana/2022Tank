@@ -38,6 +38,7 @@ public class Attack : MonoBehaviour
     {
         while(isAttackAble)
         {
+            otherPos = localDetectCom.TargetProfile().transform.position;
             BulletSpawn();
             yield return new WaitForSeconds(localAtkCD);
         }

@@ -90,7 +90,6 @@ public class UnitProfile : MonoBehaviour
         print (health.GetHpState());*/
 
         if(this.tag == "Player")
-
         hpNow = health.GetHpState(out isDead);
     }
 

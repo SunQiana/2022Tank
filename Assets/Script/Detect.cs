@@ -25,10 +25,12 @@ public class Detect : MonoBehaviour
     {
         localProfile = this.GetComponent<UnitProfile>();
         detectTrigger = localProfile.detectTrigger;
+    }
+    void Start()
+    {
         enemyLayerNum = localProfile.enemyLayerNum;
         enemyTag = localProfile.enemyTag;
     }
-
     void OnTriggerStay(Collider other)
     {
         if (IfSendAttackOrder(other)) 
@@ -104,6 +106,11 @@ public class Detect : MonoBehaviour
                 else return false;
         }
         else return false;
+    }
+
+    public UnitProfile TargetProfile()
+    {
+        return otherProfile;
     }
 }
 
