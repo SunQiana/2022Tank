@@ -22,12 +22,16 @@ public class Attack : MonoBehaviour
     void Awake()
     {
         localProfile = this.GetComponent<UnitProfile>();
+    }   
+
+    void Start()
+    {
         localAtk = localProfile.atk;
         localAtkCD = localProfile.atkCd;
         localDetectCom = localProfile.detect;
         bullet = localProfile.bullet;
         turret = localProfile.turret;
-    }   
+    }
 
     private void AttackOrder()
     {
@@ -38,7 +42,7 @@ public class Attack : MonoBehaviour
     {
         while(isAttackAble)
         {
-            otherPos = localDetectCom.TargetProfile().transform.position;
+            OtherPosUpdate();
             BulletSpawn();
             yield return new WaitForSeconds(localAtkCD);
         }
@@ -71,7 +75,7 @@ public class Attack : MonoBehaviour
 
     private void OtherPosUpdate()
     {
-        otherPos =  Vector3.zero;
+        otherPos =  localDetectCom.GetAttackPos();
     }
     
 }
