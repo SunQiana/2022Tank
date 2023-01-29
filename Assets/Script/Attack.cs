@@ -35,7 +35,8 @@ public class Attack : MonoBehaviour
 
     private void AttackOrder()
     {
-       StartCoroutine(AttackIEnume());
+        turret.StartTracking();
+        StartCoroutine(AttackIEnume());
     }
 
     IEnumerator AttackIEnume()

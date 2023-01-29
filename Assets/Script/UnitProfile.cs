@@ -79,9 +79,9 @@ public class UnitProfile : MonoBehaviour
 
     void note()
     {
-        //子彈系統wip
+
         //子彈尚未能摧毀自身
-        //子彈尚未能傳出傷害
+        //單位穿模會導致raycast報錯
     }
 
     void Update()
